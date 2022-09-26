@@ -1,4 +1,3 @@
-import { hashPassword } from '../../../lib/auth/auth'
 import dbConnect from '../../../lib/dbConnect'
 import User from '../../../models/user'
 
@@ -8,12 +7,29 @@ export default async function foodentry(req, res) {
     const { method } = req
     await dbConnect();
     if (method === "PUT") {
-        const result = await User.findOne({
+        const user = await User.findOne({
             email: credentials.email,
         })
-        if(!result){
+        if (!result) {
             res.send("No user found")
         }
+        if (result) {
+            return user._id
+        }
+        const input = User.findByIdAndUpdate(user._id, {
+            food: {
+                name,
+                price,
+                calories,
+                date,
+                time,
+            }
+        }, (err, doc) => {
+            if (err) {
+                console.log(err)
+            }
+            console.log("Updated Entry: ", doc)
+        })
         // if (result.ok) {
         //     const food = User.findByIdAndUpdate(_id)
         // }
