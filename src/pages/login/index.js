@@ -42,6 +42,7 @@ export default function AdminLogin() {
                   name="email"
                   type="email"
                   label="Email"
+                  required
                 />
                 <br />
                 <Field
