@@ -28,39 +28,41 @@ export default function AdminLogin() {
               email: values.email,
               password: values.password
             })
-            if(status.ok){
+            if (status.ok) {
               router.push("/userview")
             }
             console.log(status)
             setSubmitting(false)
           }}>
           {({ submitForm, isSubmitting }) => (
-            <Form className='space-y-5 w-fit'>
-              <Field
-                component={TextField}
-                name="email"
-                type="email"
-                label="Email"
-              />
-              <br />
-              <Field
-                component={TextField}
-                type="password"
-                label="Password"
-                name="password"
-              />
-              {isSubmitting && <LinearProgress />}
-              <br />
-              <Button
-                className='ml-16'
-                variant="outlined"
-                color="primary"
-                disabled={isSubmitting}
-                onClick={submitForm}
-              >
-                Submit
-              </Button>
-            </Form>
+            <div>
+              <Form className='space-y-5 w-fit'>
+                <Field
+                  component={TextField}
+                  name="email"
+                  type="email"
+                  label="Email"
+                />
+                <br />
+                <Field
+                  component={TextField}
+                  type="password"
+                  label="Password"
+                  name="password"
+                />
+                {isSubmitting && <LinearProgress />}
+                <br />
+                <Button
+                  className='ml-16'
+                  variant="outlined"
+                  color="primary"
+                  disabled={isSubmitting}
+                  onClick={submitForm}
+                >
+                  Submit
+                </Button>
+              </Form>
+            </div>
           )}
         </Formik>
       </div>

@@ -11,9 +11,12 @@ export default async function foodentry(req, res) {
         const result = await User.findOne({
             email: credentials.email,
         })
-        if (result.ok) {
-            const food = User.findByIdAndUpdate(_id)
+        if(!result){
+            res.send("No user found")
         }
+        // if (result.ok) {
+        //     const food = User.findByIdAndUpdate(_id)
+        // }
     }
     else {
         console.log("NO PUT")

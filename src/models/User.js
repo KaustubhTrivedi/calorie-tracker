@@ -10,6 +10,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
     },
     food: {
+        createdAt: {
+            type: Date,
+            default: Date.now(),
+        },
         foodName: {
             type: String,
         },
@@ -17,10 +21,10 @@ const UserSchema = new mongoose.Schema({
             type: Date,
         },
         calories: {
-            type: String,
+            type: Number,
         },
         price: {
-            type: String,
+            type: Number,
         }
     },
     isAdmin: {
