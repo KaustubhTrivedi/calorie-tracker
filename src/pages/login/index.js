@@ -6,6 +6,7 @@ import * as Yup from 'yup'
 import { signIn } from 'next-auth/react'
 
 export default function AdminLogin() {
+  
   const router = useRouter()
 
   return (
@@ -28,9 +29,9 @@ export default function AdminLogin() {
               email: values.email,
               password: values.password
             })
-            if (status.ok) {
-              router.push("/userview")
-            }
+            // if (status.ok) {
+            //   router.push("/userview")
+            // }
             console.log(status)
             setSubmitting(false)
           }}>

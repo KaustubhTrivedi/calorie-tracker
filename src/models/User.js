@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { FoodSchema } from "./Food";
 const UserSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -9,24 +10,8 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
     },
-    food: {
-        createdAt: {
-            type: Date,
-            default: Date.now(),
-        },
-        foodName: {
-            type: String,
-        },
-        dateOfCreation: {
-            type: Date,
-        },
-        calories: {
-            type: Number,
-        },
-        price: {
-            type: Number,
-        }
-    },
+    foods: [FoodSchema],
+    food: FoodSchema,
     isAdmin: {
         type: Boolean,
     }

@@ -1,4 +1,5 @@
 import NextAuth from "next-auth/next"
+import { compare } from 'bcryptjs'
 import { verifyPassword } from '../../../lib/auth/auth'
 import CredentialsProvider from "next-auth/providers/credentials"
 import dbConnect from "../../../lib/dbConnect"
@@ -25,20 +26,20 @@ export default NextAuth({
                         user.password
                     );
                     if (!isPasswordValid) throw new Error("Password is not valid");
-                    if (user.verifyEmail === false)
-                        throw new Error("Email is not verified");
                     return {
                         id: user._id,
-                        name: user.firstName,
                         email: user.email,
+                        username: user.username
                     };
                 } catch (error) {
                     throw new Error(error);
                 }
             }
         })
-
     ],
+    pages: {
+        signIn: "/login",
+    },
     callbacks: {
         async session({ session, token }) {
             session.user = token.user;

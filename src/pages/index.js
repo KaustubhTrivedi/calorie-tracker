@@ -8,8 +8,8 @@ export default function Home() {
 
   return (
     <div className="flex justify-center items-center h-screen space-x-5">
-      <Button variant='outlined' onClick={() => router.push("/login")}>Login</Button>
-      <Button variant='outlined' onClick={() => router.push("/signup")}>Signup</Button>
+      <Button variant='outlined' onClick={() => router.push("/adminview")}>Admin</Button>
+      <Button variant='outlined' onClick={() => router.push("/userview")}>User</Button>
     </div>
   )
 }
