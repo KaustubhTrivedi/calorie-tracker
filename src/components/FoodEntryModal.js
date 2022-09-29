@@ -1,12 +1,18 @@
 import { Button, Modal, TextField } from '@mui/material'
 import axios from 'axios'
+import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import React from 'react'
 import { useState } from 'react'
-// import { useSession } from 'next-auth/react'
 
 const FoodEntryModal = ({ open, handleClose }) => {
 
+
+  const foodSchemaValidation = Yup.object().shape({
+    nameOfFood: Yup.string().required('Required'),
+    priceOfFood: Yup.number().min(1, "Cost of item should be atleast ₹1").max(700, "You can add items upto ₹700 per item").required(),
+    calories: Yup.number().min(0).max(800, "")
+  })
 
   const formik = useFormik({
     initialValues: {
@@ -17,8 +23,9 @@ const FoodEntryModal = ({ open, handleClose }) => {
       dateOfEntry: null,
       timeOFEntry: null,
     },
+    // validationSchema: { foodSchemaValidation },
     onSubmit: async values => {
-      const response = await fetch("/api/foodentry", {
+      const response = await fetch("/api/db/POST/foodentry", {
         method: 'POST',
         headers: {
           'content-type': 'application/json',

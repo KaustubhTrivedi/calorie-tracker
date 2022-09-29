@@ -8,10 +8,10 @@ export const FoodSchema = new mongoose.Schema({
         type: String,
     },
     calories: {
-        type: String,
+        type: Number,
     },
     price: {
-        type: String,
+        type: Number,
     }
 })
 export default mongoose.models.Food ||

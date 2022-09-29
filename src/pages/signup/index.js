@@ -44,7 +44,7 @@ export default function UserLogin() {
                 setSubmitting(false);
               }
               if (res.statusText === "OK") {
-                Toast("Successfully Signed Up", "", "success");
+                Toast("✅ Successfully Signed Up", "", "success");
                 router.push("/userview")
                 return req.json()
               }

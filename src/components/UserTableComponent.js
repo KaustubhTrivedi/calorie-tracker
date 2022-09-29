@@ -6,27 +6,27 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody'
 import Paper from '@mui/material/Paper';
-import foods from '../lib/foods'
+// import foods from '../lib/foods'
 // import User from '../models/User'
 import Toast, { Toaster } from "react-hot-toast"
 import { LinearProgress } from '@mui/material';
+import axios from 'axios';
 // import { useSession } from 'next-auth/react'
 export default function UserTableComponent() {
 
     const [totalCalories, setTotalCalories] = useState(0)
     const [totalPrice, setTotalPrice] = useState(0)
-    // const [timeOfEating, setTimeOfEating] = useState()
+    const [user, setUser] = useState({})
+    const [foodArray, setFoodArray] = useState([])
 
-    // const email = "kaus12tri@gmail.com"
-
-    // const user = User.findById({
-    //     email: email
-    // }, (err, data) => {
-    //     if (err) {
-    //         console.log(err)
-    //     }
-    //     console.log(data)
-    // })
+    useEffect(() => {
+        (async () => {
+            const user = await axios.get(`/api/db/GET/fetchuser`)
+            setUser(user.data)
+            setFoodArray(user.data.foods)
+            // console.log(data)
+        })()
+    }, [])
 
     const normalisePrice = (value) => ((value - 0) * 100) / (1000 - 0) //Using these values for progress bar
     const normaliseCalories = (value) => ((value - 0) * 100) / (2100 - 0)//Using these values for progress bar
@@ -34,17 +34,18 @@ export default function UserTableComponent() {
     useEffect(() => {
         const forCalculatingPrice = []
         const forCalculatingCalories = []
-        foods.forEach((food) => {
+
+        foodArray.forEach((food) => {
             forCalculatingPrice.push(food.price)
         })
         setTotalPrice(forCalculatingPrice.reduce((partialSum, a) => partialSum + a, 0))
 
 
-        foods.forEach((food) => {
+        foodArray.forEach((food) => {
             forCalculatingCalories.push(food.calories)
         })
         setTotalCalories(forCalculatingCalories.reduce((partialSum, a) => partialSum + a, 0))
-    }, [foods])
+    }, [foodArray])
 
 
     useEffect(() => {
@@ -59,7 +60,7 @@ export default function UserTableComponent() {
         }
     }, [totalCalories])
 
-    const sortedFoods = foods.sort((a, b) => {
+    const sortedFoods = foodArray.sort((a, b) => {
         let dateA = new Date(a.createdAt)
         let dateB = new Date(b.createdAt)
         return dateB - dateA
@@ -67,7 +68,7 @@ export default function UserTableComponent() {
 
 
     return (
-        <div className='flex' suppressHydrationWarning >
+        <div className='flex'>
             <Toaster />
             <TableContainer component={Paper} className='px-20 w-2/3'>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -79,13 +80,12 @@ export default function UserTableComponent() {
                             <TableCell align="center">Price</TableCell>
                         </TableRow>
                     </TableHead>
-
                     {sortedFoods.map((food) => (
-                        <TableBody>
+                        <TableBody key={food.createdAt}>
                             <TableRow>
                                 <TableCell>{food.foodName}</TableCell>
                                 <TableCell align="center">{food.calories}</TableCell>
-                                <TableCell align="center">{`${food.createdAt.getDay()}/${food.createdAt.getMonth()}/${food.createdAt.getFullYear()}`}</TableCell>
+                                <TableCell align="center">{food.createdAt}</TableCell>
                                 <TableCell align="center">{`₹${food.price}`}</TableCell>
                             </TableRow>
                         </TableBody>
@@ -94,9 +94,9 @@ export default function UserTableComponent() {
                 </Table>
             </TableContainer>
             <div className='h-screen w-1/3 space-y-3 pt-10 px-5'>
-                <div className={totalPrice > 1000 && "bg-red-300"}>Total price of food till now: {totalPrice} / 1000</div>
+                <div className={totalPrice > 1000 ? "bg-red-300" : ""}>Total price of food till now: {totalPrice} / 1000</div>
                 <LinearProgress variant='determinate' value={normalisePrice(totalPrice)} />
-                <div className={totalCalories > 2100 && "bg-red-300"}>Total Calories consumed : {totalCalories} / 2100</div>
+                <div className={totalCalories > 2100 ? "bg-red-300" : ""}>Total Calories consumed : {totalCalories} / 2100</div>
                 <LinearProgress variant='determinate' value={normaliseCalories(totalCalories)} />
             </div>
         </div >

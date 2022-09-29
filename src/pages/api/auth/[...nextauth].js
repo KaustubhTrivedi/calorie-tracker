@@ -1,7 +1,7 @@
 import NextAuth from "next-auth/next"
 import { compare } from 'bcryptjs'
 import { verifyPassword } from '../../../lib/auth/auth'
-import CredentialsProvider from "next-auth/providers/credentials"
+import Credentials from "next-auth/providers/credentials"
 import dbConnect from "../../../lib/dbConnect"
 import User from '../../../models/User'
 
@@ -13,7 +13,7 @@ export default NextAuth({
         maxAge: 30 * 24 * 60 * 60,
     },
     providers: [
-        CredentialsProvider({
+        Credentials({
             async authorize(credentials) {
                 try {
                     await dbConnect();
@@ -26,11 +26,18 @@ export default NextAuth({
                         user.password
                     );
                     if (!isPasswordValid) throw new Error("Password is not valid");
-                    return {
-                        id: user._id,
-                        email: user.email,
-                        username: user.username
-                    };
+                    User.findById(user._id, (err, result) => {
+                        if (!err) {
+                            if (!result) {
+                                res.status(404).send("User was not found").end()
+                            } else {
+                                return {
+                                    user
+                                }
+                            }
+                        }
+                    })
+                    return { user }
                 } catch (error) {
                     throw new Error(error);
                 }
