@@ -8,11 +8,17 @@ export default async function handler(req, res) {
     if (method === "POST") {
 
         const user = User.findOne({
-            email: email
+            email: email,
         })
 
         const result = User.findByIdAndUpdate({ _id: user._id },
-            { $pull: { foods: { _id: foodId } } },
+            {
+                "$pull":
+                {
+                    foods:
+                        { _id: foodId }
+                }
+            },
             { new: true }, (err) => {
                 if (err) {
                     console.log(err)

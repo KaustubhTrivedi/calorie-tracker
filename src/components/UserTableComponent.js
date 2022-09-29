@@ -92,7 +92,7 @@ export default function UserTableComponent() {
                         </TableRow>
                     </TableHead>
                     {sortedFoods.map((food) => (
-                        <TableBody key={food.createdAt}>
+                        <TableBody key={food._id}>
                             <TableRow>
                                 <TableCell>{food.foodName}</TableCell>
                                 <TableCell align="center">{food.calories}</TableCell>
