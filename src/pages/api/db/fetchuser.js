@@ -1,5 +1,5 @@
-import User from "../../../../models/User"
-import dbConnect from "../../../../lib/dbConnect"
+import User from "../../../models/User"
+import dbConnect from "../../../lib/dbConnect"
 
 export default async function fetchUser(req, res) {
     await dbConnect()

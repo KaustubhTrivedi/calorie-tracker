@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 // import foods from '../lib/foods'
 // import User from '../models/User'
 import Toast, { Toaster } from "react-hot-toast"
-import { LinearProgress } from '@mui/material';
+import { Button, LinearProgress } from '@mui/material';
 import axios from 'axios';
 // import { useSession } from 'next-auth/react'
 export default function UserTableComponent() {
@@ -18,10 +18,13 @@ export default function UserTableComponent() {
     const [totalPrice, setTotalPrice] = useState(0)
     const [user, setUser] = useState({})
     const [foodArray, setFoodArray] = useState([])
+    const [isAdmin, setIsAdmin] = useState(true)
+    const [foodId, setFoodId] = useState()
 
+    const email = user.email;
     useEffect(() => {
         (async () => {
-            const user = await axios.get(`/api/db/GET/fetchuser`)
+            const user = await axios.get(`/api/db/fetchuser`)
             setUser(user.data)
             setFoodArray(user.data.foods)
             // console.log(data)
@@ -56,7 +59,7 @@ export default function UserTableComponent() {
 
     useEffect(() => {
         if (totalCalories > 2100) {
-            Toast("You are over budget 🤑💵💵")
+            Toast("You have eaten 2100 calories for the day🍇🍈")
         }
     }, [totalCalories])
 
@@ -66,6 +69,12 @@ export default function UserTableComponent() {
         return dateB - dateA
     })
 
+    const deleteFood = () => {
+        axios.post(`/api/db/deletefood`, {
+            email: email,
+            foodId: foodId
+        })
+    }
 
     return (
         <div className='flex'>
@@ -78,6 +87,8 @@ export default function UserTableComponent() {
                             <TableCell align="center">Calories</TableCell>
                             <TableCell align="center">Date</TableCell>
                             <TableCell align="center">Price</TableCell>
+                            {isAdmin ? <TableCell align="center">ID</TableCell> : ""}
+                            {isAdmin ? <TableCell align="center">Action</TableCell> : ""}
                         </TableRow>
                     </TableHead>
                     {sortedFoods.map((food) => (
@@ -87,6 +98,13 @@ export default function UserTableComponent() {
                                 <TableCell align="center">{food.calories}</TableCell>
                                 <TableCell align="center">{food.createdAt}</TableCell>
                                 <TableCell align="center">{`₹${food.price}`}</TableCell>
+                                {isAdmin ? <TableCell align="center">{food._id}</TableCell> : ""}
+                                {isAdmin ? <TableCell align="center"><Button onClick={() => {
+                                    setFoodId(food._id)
+                                    deleteFood()
+                                    setFoodId(0)
+
+                                }}>Delete</Button></TableCell> : ""}
                             </TableRow>
                         </TableBody>
                     ))}

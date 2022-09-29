@@ -1,6 +1,6 @@
-import dbConnect from '../../../../lib/dbConnect'
-import User from '../../../../models/User'
-import Food from '../../../../models/Food'
+import dbConnect from '../../../lib/dbConnect'
+import User from '../../../models/User'
+import Food from '../../../models/Food'
 
 export default async function foodentry(req, res) {
     const { name, price, calories, email } = req.body

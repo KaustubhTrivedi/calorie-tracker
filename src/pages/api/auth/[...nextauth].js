@@ -31,9 +31,10 @@ export default NextAuth({
                             if (!result) {
                                 res.status(404).send("User was not found").end()
                             } else {
-                                return {
-                                    user
-                                }
+                                // return {
+                                //     user
+                                // }
+                                console.log("User generated")
                             }
                         }
                     })
